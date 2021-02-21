@@ -3,11 +3,18 @@ import axios from 'axios';
 export const addUser = ({ dispatch, getState }) => next => action => {
     let newUser
     if (action.type === 'ADD_USER') {
+        debugger;
         axios.post('http://localhost:4009/addUser', action.payload)
             .then(res => {
+                debugger;
                 console.log(res.data);
                 newUser = res.data
-                dispatch(actionUser.setUser(newUser))
+                if (newUser!=undefined) {
+                    dispatch(actionUser.setUser(newUser))
+                }
+                
+            }).catch(err=>{
+                dispatch(actionUser.setError(newUser))
             })
     }
     return next(action)
@@ -45,7 +52,6 @@ export const loginSuccess = ({ dispatch, getState }) => next => action => {
 }
 export const deletePostSuccess = ({ dispatch, getState }) => next => action => {
     if (action.type === 'DELETE_POST_SUCCESS') {
-        debugger;
         axios.delete(`http://localhost:4009/deletePost/${action.payload}`)
             .then(res => {
                 debugger;
@@ -60,8 +66,6 @@ export const deletePostSuccess = ({ dispatch, getState }) => next => action => {
 }
 export const editPost = ({ dispatch, getState }) => next => action => {
     if (action.type === 'EDIT_POST') {
-        debugger;
-
         axios.post(`http://localhost:4009/editPost/${action.payload.id}`, action.payload.post)
             .then(res => {
                 debugger;
@@ -77,7 +81,6 @@ export const editPost = ({ dispatch, getState }) => next => action => {
     return next(action)
 }
 export const newPost = ({ dispatch, getState }) => next => action => {
-debugger;
     if (action.type === 'NEW_POST') {
         axios.post('http://localhost:4009/addPost', action.payload)
             .then(res => {

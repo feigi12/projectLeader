@@ -7,26 +7,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-export default function NewPost(props) {
-    const [title, setTitle] = useState('')
-    const [body, setbody] = useState('')
-    const save = () => {
-        props.handleClose()
-        props.setShow(false)
-        console.log(title, body)
-       
-            props.newPost({ title: title, body: body })
-    }
-    const { } = props
+export default function EditPost(props) {
+    const [title, setTitle] = useState(props.title)
+    const [body, setbody] = useState(props.body)
     return (
-
         <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">New Post</DialogTitle>
+            <DialogTitle id="form-dialog-title">Edit Post</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    You can write a post as you wish
-          </DialogContentText>
-          <TextField
+              
+                <TextField
                     autoFocus
                     margin="dense"
                     id="title"
@@ -34,8 +23,10 @@ export default function NewPost(props) {
                     type="text"
                     fullWidth
                     onChange={(e) => setTitle(e.target.value)}
+                    value={title}
                 />
                 <TextField
+                value={body}
                     id="body"
                     label="body......"
                     multiline
@@ -43,14 +34,15 @@ export default function NewPost(props) {
                     variant="filled"
                     fullWidth
                     onChange={(e) => setbody(e.target.value)}
+
                 />
-              
+
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
           </Button>
-                <Button onClick={() => save()} color="primary">
+                <Button onClick={() => props.updateP(props.id, { title: title, body: body })} color="primary">
                     Submit
           </Button>
             </DialogActions>

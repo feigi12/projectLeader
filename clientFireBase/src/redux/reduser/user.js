@@ -18,6 +18,7 @@ const user = {
     setUser(state, action) {
         console.log(action.payload)
         state.user = action.payload
+        state.errorMessage=null
     },
     newPostSuccess(state, action) {
         debugger;

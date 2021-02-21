@@ -1,11 +1,13 @@
 // function component
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect, Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionUser } from '../redux/actions/actionUser'
 import { actionPost } from '../redux/actions/actionPost'
 import { signInWithGoogle } from '../fireBase/fireBase'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import Alert from '@material-ui/lab/Alert';
+
 import * as Yup from 'yup';
 const RegisterScema = Yup.object().shape({
     email: Yup.string()
@@ -21,14 +23,22 @@ const RegisterScema = Yup.object().shape({
         .required('Required field')
 
 });
-
+function mapStateToProps(state) {
+    return {
+        errorMessage: state.userReduser.errorMessage
+    }
+}
 const mapDispatchToProps = (dispatch) => ({
-    addUser: (user) => dispatch(actionUser.addUser(user)),
-    getAllPost: () => dispatch(actionUser.getAllPost())
+    addUser: (user) => dispatch(actionUser.addUser(user))
 })
 
 function Register(props) {
-    const { addUser, getAllPost } = props
+    const { addUser } = props
+    useEffect(() => {
+        if (props.errorMessage === null) {
+            props.history.push('/home');
+        }
+    }, [props.errorMessage])
     const handelSubmit = (values) => {
         if (values.firstName === "" || values.lastName == '' || values.email == "" || values.password == "") {
             return <Redirect to={{ pathname: '/register', state: { flash: 'חובה להכניס את כל הנתונים' } }} />
@@ -36,8 +46,6 @@ function Register(props) {
         else {
             let newUser = { firstName: values.firstName, lastName: values.lastName, email: values.email, password: values.password }
             addUser(newUser)
-            getAllPost()
-            props.history.push('/menu');
         }
     }
 
@@ -75,8 +83,13 @@ function Register(props) {
                                 <Field type="password" name="password" className="form-control" placeholder="Password" />
                                 <ErrorMessage name="password" component="div" class="alert alert-danger" />
                             </div>
+                            {props.errorMessage != null &&
+                                <Alert  severity="error">
+                                    This email address is already in use!
+                       </Alert>
+                            }
 
-                            <div className="form-group">
+                            <div className="form-group mt-3">
                                 <button className="btn btn-primary btn-lg btn-block" type="submit"> Get Started</button>
 
                             </div>
@@ -89,6 +102,7 @@ function Register(props) {
                             </div>
                             <h6 style={{ display: 'inline-block' }}>Already have an account?</h6>
                             <Link style={{ display: 'inline-block' }} className="nav-link" to="/login" >Sign in. </Link>
+
                         </Form>
                     </Formik>
                 </div>
@@ -97,4 +111,4 @@ function Register(props) {
         </>
     )
 }
-export default (withRouter(connect(null, mapDispatchToProps)(Register)));
+export default (withRouter(connect(mapStateToProps, mapDispatchToProps)(Register)));

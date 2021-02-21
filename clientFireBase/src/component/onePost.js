@@ -1,55 +1,67 @@
 import React from 'react';
 import Menu from './menu';
 import { useState } from 'react';
-import { connect } from 'react-redux';
-import { actionUser } from '../redux/actions/actionUser';
-import { Redirect, Link, withRouter } from 'react-router-dom';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Typography from '@material-ui/core/Typography';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import EditPost from './editPost';
 
+import './style.css'
 export default function OnPost(props) {
     const { index } = props
-    const [title, setTitle] = useState(props.index.title)
-    const [body, setBody] = useState(props.index.body)
+    // const [title, setTitle] = useState(props.index.title)
+    // const [body, setBody] = useState(props.index.body)
+    const [open, setOpen] = useState(false);
 
+    const handleClickOpen = (index) => {
+        setOpen(true);
+    };
+  
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const updateP = (id, post) => {
+          props.updatePost(id, post)
+        setOpen(false);
+    }
     return (
         <>
-            <tr key={index._id}>
-                <td>
-                    <input
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        type='text'
-                    />
+            <div className="m-3 ">
+            <EditPost updateP={updateP} title={index.title} body={index.body} id={index._id} open={open} handleClose={handleClose}></EditPost>
 
-                </td>
-                <td>
-                    <textarea
-                        cols='30'
-                        rows='7'
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                    />
-                </td>
-                <td>
-                    <button
-                        type="button" className="btn btn-primary mt-5 mb-5"
-                        onClick={() => props.deletePost(index._id)}
-                    >  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                        </svg></button>
-                </td>
-                <td>
-                    <button
-                        type="button" className="btn btn-primary mt-5 mb-5"
-                        onClick={() => props.updateP(index._id, { title: title, body: body })}
+                <Accordion >
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-                            <path d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z" />
-                        </svg>
-                    </button>
-                </td>
+                        <DeleteForeverRoundedIcon className="btnIcon" onClick={() => props.deleteP(index._id)}></DeleteForeverRoundedIcon>
 
-            </tr>
+                        <Typography >
+                            <h3>{index.title}</h3>
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography>
+                            {index.body}
+
+                            <p id="editp">
+                                <EditOutlinedIcon onClick={() => handleClickOpen()} className="btnIcon" ></EditOutlinedIcon>
+                                                .............edit the post
+                                                </p>
+                        </Typography>
+                    </AccordionDetails>
+                </Accordion>
+
+            </div>
+
+
 
         </>
 

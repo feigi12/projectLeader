@@ -78,6 +78,7 @@ const getUserById = async (req, res) => {
 const addUser = async (req, res) => {
     try {
         const user = new User(req.body)
+        console.log(user);
         await user.save()
      await sendMail(req.body.email)
         res.status(200).json(user)

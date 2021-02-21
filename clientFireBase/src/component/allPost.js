@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { actionUser } from '../redux/actions/actionUser';
 import { Link } from 'react-router-dom';
-import alertDialog from './alertDaialog'
+import alertDialog from './alertDaialog';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 function mapStateToProps(state) {
     return {
         allPost: state.userReduser.allPost
@@ -28,7 +30,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AllPost(pro
             setFirstLoading(false)
         }
     }, [])
-   
+
     const deleteLogicMessage = (post) => {
         alertDialog("Sure you want to add this post?").then(() => {
             newPost(post)
@@ -40,6 +42,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AllPost(pro
     return (
         <>
             <Menu />
+            {/* <div ><CircularProgress disableShrink /></div> */}
+
             <h1>All Post</h1>
             <div className="row d-flex justify-content-center">
                 <div className="col-xs-12 col-md-11  col-lg-9">
@@ -73,7 +77,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(function AllPost(pro
                                 ))
                             }
                         </tbody>
-                    </table> : <h1>בעיה בשליפת הנתונים</h1>}
+                    </table> :
+                         <h1>בעיה בשליפת הנתונים</h1>
+                    }
 
                 </div>
             </div>

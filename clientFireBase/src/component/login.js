@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { Redirect, Link, withRouter } from 'react-router-dom'
 import { actionUser } from '../redux/actions/actionUser'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { signInWithGoogle } from '../fireBase/fireBase'
+import { signInWithGoogle } from '../fireBase/fireBase';
+import Alert from '@material-ui/lab/Alert';
 import * as Yup from 'yup';
 
 const LoginSchema = Yup.object().shape({
@@ -32,7 +33,7 @@ function Login(props) {
     const [firstLoading, setFirstLoading] = useState(true)
     useEffect(() => {
         if (props.errorMessage === null) {
-            props.history.push('/menu');
+            props.history.push('/home');
         }
     }, [props.errorMessage])
     const handelSubmit = (values) => {
@@ -41,11 +42,8 @@ function Login(props) {
         }
         else {
             let newUser = { email: values.email, password: values.password }
-            // if (firstLoading) {
-                login(newUser)
-                setFirstLoading(false)
-            // }
-
+            login(newUser)
+           
         }
     }
     return (
@@ -74,19 +72,24 @@ function Login(props) {
                                 <Field type="password" name="password" className="form-control" placeholder="Password" />
                                 <ErrorMessage name="password" component="div" class="alert alert-danger" />
                             </div>
+                            {props.errorMessage != null &&
+                                <Alert  severity="error">
+                                    Please provide a valid email and password!
+
+                            </Alert>
+                            }
 
                             <div className="form-group">
                                 <button className="btn btn-primary btn-lg btn-block" type="submit"> Login</button>
 
                             </div>
-                            <div className="form-group">
+                            <div className="form-group mt-3">
                                 <Link className="nav-link" to="/">
                                     <button onClick={signInWithGoogle}
                                         className="btn btn-primary btn-lg btn-block">
                                         Sign in with Google</button>
                                 </Link>
                             </div>
-                            {props.errorMessage != null && <label>error</label>}
                         </Form>
                     </Formik>
                 </div>

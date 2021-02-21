@@ -1,0 +1,15 @@
+.p{
+    font-size: 30px;
+}
+.h1My{
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
+.btnIcon{
+    color: rgb(25, 25, 112);
+    font-size: 30px !important;
+    margin-left: 20px;
+}
+#editp{
+  direction: rtl;
+}
